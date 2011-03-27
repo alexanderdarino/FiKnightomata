@@ -1,0 +1,46 @@
+# Rivas Finite Automaton (RFA) File Format Specification V0.0.0
+# By: Alexander Darino
+# Used to unambiguously represent both DFAs and (E-)NFAs. Once states and alphabet symbols are defined, they are then referenced by number in the order of their definition.
+
+NUMBER OF STATES
+statename_1
+statename_2
+...
+statename_n
+
+# THIS IS A LINE COMMENT; if a line begins with #, ignore it
+
+NUMBER OF ALPHABET SYMBOLS
+sym_1
+sym_2
+...
+sym_n
+#NOTE: Symbols can be any single-line string, such as "HELLO WORLD!!!"
+
+FOR EACH STATE 1 through N (in order of state #)
+	FOR EACH SYMBOL (in order of symbol #, 0 represents epsilon transition)
+		COMMA DELIMITED LIST OF STATE #s REPRESENTING TRANSITION STATES OR 0 IF UNDEFINED/ERROR/NONE/ETC (IE. TERMINAL FAILURE)
+		SPACE
+	NEWLINE
+#NOTE: The presence of a comma indicates there is another integer following. For a given input,
+# stop reading transition states when you read a transition state that is not followed by a comma
+
+# DFA EXAMPLE:
+#INPUTS:0	1	2
+#	1	2	3
+#	2	3	1
+#	3	1	2
+
+# E-NFA EXAMPLE:
+#INPUTS:0	1	2
+#	0	0	1
+#	1 , 2	2, 3	0
+#	1,	2 2	3	NOTE: On input 0 transitions go to states 1 and 2 and on input 1 transitions go to state 2. Obviously poorly-formed but a good example
+
+START STATE NUMBER
+
+NUMBER OF ACCEPTING STATES
+acceptingstatenumber_0
+acceptingstatenumber_1
+...
+acceptingstatenumber_n-1
