@@ -1,7 +1,7 @@
-package finiteautomaton.nfa;
+package FiKnightomata.nfa;
 
-import finiteautomaton.dfa.DFA;
-import finiteautomaton.nfa.Transitions;
+import FiKnightomata.dfa.DFA;
+import FiKnightomata.nfa.Transitions;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;

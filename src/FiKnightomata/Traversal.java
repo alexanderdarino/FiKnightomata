@@ -1,4 +1,4 @@
-package finiteautomaton;
+package FiKnightomata;
 
 /**
  * Represents the transitions made by an automaton from a state on a given input.

@@ -1,8 +1,8 @@
-package finiteautomaton.nfa;
+package FiKnightomata.nfa;
 
-import finiteautomaton.SetLabel;
-import finiteautomaton.*;
-import finiteautomaton.dfa.DFA;
+//import finiteautomaton.SetLabel;
+import FiKnightomata.*;
+import FiKnightomata.dfa.DFA;
 import java.util.*;
 
 /**
@@ -33,7 +33,7 @@ public class NFA extends FiniteAutomaton{
 
 
     @Override
-    public finiteautomaton.Execution execute(String[] input) {
+    public FiKnightomata.Execution execute(String[] input) {
         throw new UnsupportedOperationException();
     }
 
@@ -84,9 +84,9 @@ public class NFA extends FiniteAutomaton{
 
         while(!bfs.isEmpty()){
             String state = (String) bfs.poll();
-            //String newState = dfaBuilder.setToState(closure(state));
-            SetLabel newState = new SetLabel(closure(state));
-            //dfaBuilder.addState(dfaBuilder.setToState(state));
+            String newState = dfaBuilder.setToState(closure(state));
+            // newState = new SetLabel(closure(state));
+            dfaBuilder.addState(dfaBuilder.setToState(state));
             dfaBuilder.addState(newState);
 
             for(String alphaSym : epsilonFreeNFA.getAlphabet()){

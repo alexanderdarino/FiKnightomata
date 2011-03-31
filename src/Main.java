@@ -1,7 +1,7 @@
-import finiteautomaton.nfa.RFAFile;
-import finiteautomaton.*;
-import finiteautomaton.dfa.DFA;
-import finiteautomaton.nfa.NFA;
+import FiKnightomata.nfa.RFAFile;
+import FiKnightomata.*;
+import FiKnightomata.dfa.DFA;
+import FiKnightomata.nfa.NFA;
 import java.util.Scanner;
 
 /**

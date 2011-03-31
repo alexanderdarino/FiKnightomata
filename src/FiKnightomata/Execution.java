@@ -1,7 +1,7 @@
-package finiteautomaton;
+package FiKnightomata;
 
 import java.util.ArrayList;
-import finiteautomaton.FiniteAutomaton.*;
+import FiKnightomata.FiniteAutomaton.*;
 
 /**
  * Maintains the list of {@link finiteautomaton.Traversal}s

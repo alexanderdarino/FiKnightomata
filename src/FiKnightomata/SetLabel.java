@@ -1,4 +1,4 @@
-package finiteautomaton;
+package FiKnightomata;
 
 import java.util.ArrayList;
 import java.util.Set;

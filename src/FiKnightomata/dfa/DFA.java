@@ -1,6 +1,6 @@
-package finiteautomaton.dfa;
+package FiKnightomata.dfa;
 
-import finiteautomaton.*;
+import FiKnightomata.*;
 import java.lang.StringBuilder;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -118,104 +118,76 @@ public class DFA extends FiniteAutomaton
 
     private void clean()
     {
-
-        //Remove all-null non-accepting transition states
-        //for (String state : transitions.getStates())
-
-
-//        {
-//            Queue<String> states = new LinkedList();
-//            states.addAll(transitions.getStates());
-//            states.remove(null);
-//            while (!states.isEmpty())
-//            {
-//                String state = states.poll();
-//                if (isAccepting(state))
-//                {
-//                    continue;
-//                }
-//                boolean remove = true;
-//                for (String alphaSym : transitions.getAlphabet())
-//                {
-//                    if (transitions.get(state, alphaSym) != null)
-//                    {
-//                        remove = false;
-//                        break;
-//                    }
-//                }
-//                if (remove)
-//                {
-//                    states.addAll(transitions.removeState(state));
-//                }
-//            }
-//        }
-
-        //remove unreachable states
         Set<String> visited = new HashSet();
         Stack<String> dfsStack = new Stack();
+        Set<String> keep = new HashSet();
 
         dfsStack.push(stateStart);
-        visited.add(stateStart);
 
-        for (String alphaSym : transitions.getAlphabet()) 
-        {
-            String neighbor = transitions.get(dfsStack.peek(), alphaSym);
-
-            if (neighbor == null) continue;
-
-            dfsStack.push(neighbor);
-            visited.add(neighbor);
-        }
-        
         Set<String> alphabet = transitions.getAlphabet();
 
-
+        // Mark all states that are on a simple path to an accepting state
+        while (!dfsStack.isEmpty())
         {
-            boolean deadCycle = true;
-            while (!dfsStack.isEmpty())
+            String state = dfsStack.pop();
+            visited.add(state);
+
+            if (isAccepting(state))
             {
-                String state = dfsStack.pop();
-
-                //boolean deadCycle = true;
-
-                for (String alphaSym : alphabet)
+                for (String i : dfsStack)
                 {
-                    String neighbor = transitions.get(state, alphaSym);
-
-                    if (neighbor == null) continue;
-
-                    if (isAccepting(neighbor))
-                        deadCycle = false;
-
-                    if (visited.contains(neighbor))
-                    {
-        //                    String deleteState;
-        //                    if(dfsStack.isEmpty()) continue;
-        //                    deleteState = dfsStack.peek();
-        //                    while(!deleteState.equals(neighbor))
-        //                    {
-//                            transitions.removeState(deleteState);
-//                            deleteState = dfsStack.pop();
-//                            if(dfsStack.isEmpty()) break;
-
-                        if (deadCycle)
-                            transitions.set(state, alphaSym, null);
-                        else
-                            deadCycle = true;
-                        continue;
-                    }
-
-                    dfsStack.push(neighbor);
-                    visited.add(neighbor);
-
-
+                    keep.add(i);
                 }
-
-                //if(deadCycle)
-                //    transitions.removeState(state);
             }
-    }
 
+            // Add unvisited neighbors
+            for (String alphaSym : alphabet)
+            {
+                String neighbor = transitions.get(state, alphaSym);
+
+                if (neighbor == null) continue;
+
+                if (!visited.contains(neighbor))
+                    dfsStack.push(neighbor);
+
+            }
+        }
+
+        // Mark all states that are on cycles leading to an accepting state
+        
+        visited = new HashSet();
+        dfsStack = new Stack();
+        while (!dfsStack.isEmpty())
+        {
+            String state = dfsStack.pop();
+            visited.add(state);
+            
+            if (dfsStack.contains(state) && keep.contains(state))
+            {
+                for (String i : dfsStack)
+                {
+                    keep.add(i);
+                }
+            }
+
+            // Add unvisited neighbors
+            for (String alphaSym : alphabet)
+            {
+                String neighbor = transitions.get(state, alphaSym);
+
+                if (neighbor == null) continue;
+
+                if (!visited.contains(neighbor))
+                    dfsStack.push(neighbor);
+
+            }
+        }
+
+        for (String state : getStates())
+        {
+            if (!keep.contains(state))
+                getTransitions().removeState(state);
+        }
 
     }
 
@@ -223,7 +195,7 @@ public class DFA extends FiniteAutomaton
     {
 
         protected DFA dfa = new DFA(new HashSet(), new HashSet());
-        protected Set<SetLabel> setLabels = new HashSet();
+        //protected Set<SetLabel> setLabels = new HashSet();
 
         protected Builder()
         {
@@ -249,10 +221,10 @@ public class DFA extends FiniteAutomaton
             }
         }
 
-        void addSetLabel(SetLabel setLabel)
-        {
-            setLabels.add(setLabel);
-        }
+//        void addSetLabel(SetLabel setLabel)
+//        {
+//            setLabels.add(setLabel);
+//        }
 
         public boolean addState(String state)
         {

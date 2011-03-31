@@ -1,9 +1,9 @@
-package finiteautomaton.dfa;
+package FiKnightomata.dfa;
 
-import finiteautomaton.*;
+import FiKnightomata.*;
 import java.util.ArrayList;
 
-public class Execution extends finiteautomaton.Execution
+public class Execution extends FiKnightomata.Execution
 {
     protected ArrayList<Traversal> traversals = new ArrayList();
 
@@ -60,7 +60,7 @@ public class Execution extends finiteautomaton.Execution
         return rval.toString();
     }
 
-    public static class Builder extends finiteautomaton.Execution.Builder
+    public static class Builder extends FiKnightomata.Execution.Builder
     {
 
         protected ArrayList<Traversal> traversals = new ArrayList();
@@ -92,7 +92,7 @@ public class Execution extends finiteautomaton.Execution
         }
     }
 
-    public static class Traversal extends finiteautomaton.Traversal
+    public static class Traversal extends FiKnightomata.Traversal
     {
         protected String stateEnd;
 

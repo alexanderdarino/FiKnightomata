@@ -1,4 +1,4 @@
-package finiteautomaton.nfa;
+package FiKnightomata.nfa;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
