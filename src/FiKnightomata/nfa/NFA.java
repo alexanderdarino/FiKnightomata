@@ -143,7 +143,7 @@ public class NFA extends FiniteAutomaton{
     }
     
     protected NFA toEpisilonFreeNFA() {
-        Set set = transitions.getAlphabet();
+        Set set = new HashSet(transitions.getAlphabet());
         set.remove("");
         NFA r_val = new NFA(transitions.getStates(), set);
         r_val.stateStart = stateStart;
@@ -260,6 +260,11 @@ public class NFA extends FiniteAutomaton{
         transitions.clean();
     }
 
+    protected void removeAcceptingState(String state)
+    {
+        statesAccepting.remove(state);
+    }
+
     public static class Builder
     {
         NFA nfa = new NFA (new HashSet(), new HashSet());
@@ -307,10 +312,49 @@ public class NFA extends FiniteAutomaton{
             return true;
         }
 
+        public boolean isAcceptingState (String state)
+        {
+            return nfa.isAccepting(state);
+        }
+
+        public Set<String> getTransitions(String source, String input)
+        {
+            return nfa.getTransitions().get(source, input);
+        }
+
+        public void removeAcceptingState(String stateAccepting)
+        {
+            nfa.removeAcceptingState(stateAccepting);
+        }
+
+        public void removeState(String state)
+        {
+            nfa.getTransitions().removeState(state);
+        }
+
+        public void removeAlphaSym(String alphaSym)
+        {
+            nfa.getTransitions().removeAlphaSym(alphaSym);
+        }
+        public void removeTranstion(String source, String alphaSym, String dest)
+        {
+            nfa.getTransitions().removeTransition(source, alphaSym, dest);
+        }
+
         public NFA build(){
             nfa.clean();
 
             return nfa;
+        }
+
+        public Set<String> getStates()
+        {
+            return nfa.getStates();
+        }
+
+        public Set<String> getAlphabet()
+        {
+            return nfa.getAlphabet();
         }
     }
 }

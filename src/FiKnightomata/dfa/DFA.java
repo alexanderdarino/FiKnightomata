@@ -121,6 +121,7 @@ public class DFA extends FiniteAutomaton
         Set<String> visited = new HashSet();
         Stack<String> dfsStack = new Stack();
         Set<String> keep = new HashSet();
+        Stack<String> path = new Stack();
 
         dfsStack.push(stateStart);
 
@@ -129,7 +130,9 @@ public class DFA extends FiniteAutomaton
         // Mark all states that are on a simple path to an accepting state
         while (!dfsStack.isEmpty())
         {
+
             String state = dfsStack.pop();
+            path.push(state);
             visited.add(state);
 
             if (isAccepting(state))
@@ -141,6 +144,7 @@ public class DFA extends FiniteAutomaton
             }
 
             // Add unvisited neighbors
+            boolean backTracking = true;
             for (String alphaSym : alphabet)
             {
                 String neighbor = transitions.get(state, alphaSym);
@@ -148,9 +152,13 @@ public class DFA extends FiniteAutomaton
                 if (neighbor == null) continue;
 
                 if (!visited.contains(neighbor))
+                {
                     dfsStack.push(neighbor);
-
+                    backTracking = false;
+                }
             }
+            if (backTracking)
+                path.pop();
         }
 
         // Mark all states that are on cycles leading to an accepting state
@@ -283,7 +291,7 @@ public class DFA extends FiniteAutomaton
 
         public DFA build()
         {
-            dfa.clean();
+            //dfa.clean();
             return dfa;
         }
     }

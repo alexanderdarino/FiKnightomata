@@ -26,7 +26,7 @@ public class Main {
         String input = in.nextLine();
         if (input.compareTo("") == 0)
             return;
-        finiteautomaton.dfa.Execution myExecution = convertedTest.execute(input);
+        FiKnightomata.dfa.Execution myExecution = convertedTest.execute(input);
         myExecution.printLastTraversal();
         input = in.nextLine();
         while (input.compareTo("") != 0)

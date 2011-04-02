@@ -1,4 +1,5 @@
 package FiKnightomata.nfa;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +23,22 @@ public class Transitions
             transitions.get(state).clean();
         }
     }
+
+    protected void removeState(String state)
+    {
+        states.remove(state);
+        transitions.remove(state);
+        for (String i : states)
+            transitions.get(state).removeTransition(i, state);
+    }
+
+    protected void removeTransition(String source, String alphaSym, String dest)
+    {
+        if (!(states.contains(source) && states.contains(dest) && alphabet.contains(alphaSym))) return;
+
+        transitions.get(source).removeTransition(alphaSym, dest);
+    }
+
 
     protected class StateTransition
     {
@@ -114,7 +131,7 @@ public class Transitions
         return true;
     }
 
-    public void removeAlphaSym (String alphaSym){
+    protected void removeAlphaSym (String alphaSym){
         alphabet.remove(alphaSym);
         for (String state : states)
             transitions.get(state).removeAlphaSym(alphaSym);
@@ -132,12 +149,14 @@ public class Transitions
 
     public Set<String> getStates()
     {
-        return (Set<String>) states.clone();
+        //return (Set<String>) states.clone();
+        return Collections.unmodifiableSet(states);
     }
 
     public Set<String> getAlphabet()
     {
-        return (Set<String>) alphabet.clone();
+        //return (Set<String>) alphabet.clone();
+        return Collections.unmodifiableSet(alphabet);
     }
 
     protected HashMap<String, StateTransition> transitions = new HashMap();
