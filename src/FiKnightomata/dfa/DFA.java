@@ -294,6 +294,11 @@ public class DFA extends FiniteAutomaton
             //dfa.clean();
             return dfa;
         }
+
+        public String getTransition(String state, String alphaSym)
+        {
+            return dfa.getTransitions().get(state, alphaSym);
+        }
     }
 
     public void print()
