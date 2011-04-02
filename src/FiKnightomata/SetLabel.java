@@ -1,14 +1,21 @@
 package FiKnightomata;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class SetLabel {
 
-    public SetLabel(String label)
+    public SetLabel ()
     {
-        add(label);
+
+    }
+
+    public SetLabel(String state)
+    {
+        add(state);
     }
 
     @Override
@@ -21,7 +28,7 @@ public class SetLabel {
             return false;
         }
         final SetLabel other = (SetLabel) obj;
-        if (this.labels != other.labels && (this.labels == null || !this.labels.equals(other.labels))) {
+        if (this.states != other.states && (this.states == null || !this.states.equals(other.states))) {
             return false;
         }
         return true;
@@ -31,37 +38,46 @@ public class SetLabel {
     public int hashCode()
     {
         int hash = 7;
-        hash = 23 * hash + (this.labels != null ? this.labels.hashCode() : 0);
+        hash = 23 * hash + (this.states != null ? this.states.hashCode() : 0);
         return hash;
     }
-    public SetLabel(Set<String> labels)
+
+    public SetLabel(Set<String> states)
     {
-        this.labels.addAll(labels);
+        this.states.addAll(states);
     }
 
-    protected TreeSet<String> labels = new TreeSet();
+    protected Set<String> states = new HashSet();
 
-    public void add(String label)
+    public void add(String state)
     {
-        labels.add(label);
+        states.add(state);
     }
 
-    public void remove (String label)
+    public void addAll(Set<String> states)
     {
-        labels.remove(label);
+        this.states.addAll(states);
     }
 
-    public boolean contains (String label)
+    public void remove (String state)
     {
-        return labels.contains(label);
+        states.remove(state);
+    }
+
+    public boolean contains (String state)
+    {
+        return states.contains(state);
     }
 
     @Override
     public String toString()
     {
         StringBuilder toString = new StringBuilder("{");
-        ArrayList<String> labels_list = new ArrayList(labels);
-        for (int i = 0; i < labels.size() - 1; i++)
+        ArrayList<String> labels_list = new ArrayList(states);
+        Collections.sort(labels_list);
+
+
+        for (int i = 0; i < labels_list.size() - 1; i++)
         {
             toString.append(labels_list.get(i)).append(", ");
         }
@@ -69,6 +85,14 @@ public class SetLabel {
         return toString.toString();
     }
 
+    public Set<String> getStates()
+    {
+        return Collections.unmodifiableSet(states);
+    }
 
+    public int size()
+    {
+        return states.size();
+    }
 
 }

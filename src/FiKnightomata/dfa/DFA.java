@@ -137,7 +137,9 @@ public class DFA extends FiniteAutomaton
 
             if (isAccepting(state))
             {
-                for (String i : dfsStack)
+                //String[] ancestors = new String[dfsStack.size()];
+                //ancestors = dfsStack.toArray(ancestors);
+                for (String i : path)
                 {
                     keep.add(i);
                 }
@@ -165,20 +167,16 @@ public class DFA extends FiniteAutomaton
         
         visited = new HashSet();
         dfsStack = new Stack();
+        path = new Stack();
+        dfsStack.add(stateStart);
         while (!dfsStack.isEmpty())
         {
             String state = dfsStack.pop();
+            path.add(state);
             visited.add(state);
-            
-            if (dfsStack.contains(state) && keep.contains(state))
-            {
-                for (String i : dfsStack)
-                {
-                    keep.add(i);
-                }
-            }
 
             // Add unvisited neighbors
+            boolean backTracking = true;
             for (String alphaSym : alphabet)
             {
                 String neighbor = transitions.get(state, alphaSym);
@@ -186,9 +184,21 @@ public class DFA extends FiniteAutomaton
                 if (neighbor == null) continue;
 
                 if (!visited.contains(neighbor))
+                {
                     dfsStack.push(neighbor);
+                    backTracking = false;
+                }
 
+                if (path.contains(neighbor) && keep.contains(neighbor))
+                {
+                    for (String i : path)
+                    {
+                        keep.add(i);
+                    }
+                }
             }
+            if (backTracking)
+                path.pop();
         }
 
         for (String state : getStates())
@@ -291,7 +301,7 @@ public class DFA extends FiniteAutomaton
 
         public DFA build()
         {
-            //dfa.clean();
+            dfa.clean();
             return dfa;
         }
 

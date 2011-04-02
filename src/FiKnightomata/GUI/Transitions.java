@@ -6,6 +6,7 @@
 package FiKnightomata.GUI;
 
 import FiKnightomata.nfa.NFA;
+import FiKnightomata.nfa.NFA.Builder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -24,7 +25,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class Transitions extends JPanel{
 
-    protected final TableModel data = new TableModel();
+    protected TableModel data;
     protected final JTable table = new JTable(data);
 
     public Transitions()
@@ -33,9 +34,14 @@ public class Transitions extends JPanel{
         table.setVisible(true);
         add(table, BorderLayout.CENTER);
         setVisible(true);
-
     }
 
+    public Transitions(NFA.Builder builder)
+    {
+        this();
+        data = new TableModel(builder);
+
+    }
     public void addState(String state)
     {
         data.addState(state);
@@ -80,7 +86,16 @@ public class Transitions extends JPanel{
 
     protected class TableModel extends AbstractTableModel
     {
-        protected final NFA.Builder builder = NFA.Builder.create();
+        protected final NFA.Builder builder;// = NFA.Builder.create();
+
+        public TableModel(Builder builder)
+        {
+            this.builder = builder;
+
+            colSym.put(0, "Is Accepting?");
+            colSym.put(1, "States");
+            colSym.put(2, "\u03F5"); // epsilon
+        }
 
         public void addAcceptingState(String stateAccepting)
         {
@@ -100,13 +115,6 @@ public class Transitions extends JPanel{
             rowState.put(getStates().size(), state);
             fireTableRowsInserted(getStates().size() - 1, getStates().size() - 1);
             return true;
-        }
-
-        public TableModel()
-        {
-            colSym.put(0, "Is Accepting?");
-            colSym.put(1, "States");
-            colSym.put(2, "\u03F5"); // epsilon
         }
 
 

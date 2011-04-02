@@ -11,12 +11,16 @@
 
 package FiKnightomata.GUI;
 
+import FiKnightomata.nfa.NFA;
+
 /**
  *
  * @author Alexander Darino
  */
 public class FileEditor extends javax.swing.JFrame {
 
+
+    private NFA.Builder nfaBuilder = NFA.Builder.create();
     /** Creates new form FileEditor */
     public FileEditor() {
         initComponents();
@@ -30,6 +34,7 @@ public class FileEditor extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         transitionsTable = new FiKnightomata.GUI.Transitions();
         controlPanel = new javax.swing.JPanel();
@@ -49,7 +54,15 @@ public class FileEditor extends javax.swing.JFrame {
         addRemoveStatePanel1 = new javax.swing.JPanel();
         addAlphaSymButton = new javax.swing.JButton();
         removeAlphaSymButton = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        transitionsPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
+        jButton2 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList2 = new javax.swing.JList();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
 
@@ -144,18 +157,49 @@ public class FileEditor extends javax.swing.JFrame {
 
         controlPanel.add(stateAlphaEditorPanel, java.awt.BorderLayout.NORTH);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 339, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 442, Short.MAX_VALUE)
-        );
+        transitionsPanel.setLayout(new java.awt.GridBagLayout());
 
-        controlPanel.add(jPanel1, java.awt.BorderLayout.CENTER);
+        jLabel1.setText("Available States");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        transitionsPanel.add(jLabel1, gridBagConstraints);
+
+        jLabel2.setText("Transition States");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        transitionsPanel.add(jLabel2, gridBagConstraints);
+
+        jScrollPane1.setViewportView(jList1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
+        transitionsPanel.add(jScrollPane1, gridBagConstraints);
+
+        jButton2.setText("<-");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        transitionsPanel.add(jButton2, gridBagConstraints);
+
+        jScrollPane2.setViewportView(jList2);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
+        transitionsPanel.add(jScrollPane2, gridBagConstraints);
+
+        jButton1.setText("->");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        transitionsPanel.add(jButton1, gridBagConstraints);
+
+        controlPanel.add(transitionsPanel, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(controlPanel, java.awt.BorderLayout.EAST);
 
@@ -222,9 +266,16 @@ public class FileEditor extends javax.swing.JFrame {
     private javax.swing.JTextField alphaSymField;
     private javax.swing.JLabel alphaSymLabel;
     private javax.swing.JPanel controlPanel;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JList jList1;
+    private javax.swing.JList jList2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton removeAlphaSymButton;
     private javax.swing.JButton removeStateButton;
     private javax.swing.JComboBox startStateList;
@@ -234,6 +285,7 @@ public class FileEditor extends javax.swing.JFrame {
     private javax.swing.JPanel stateEditorPanel;
     private javax.swing.JTextField stateNameField;
     private javax.swing.JLabel stateNameLabel;
+    private javax.swing.JPanel transitionsPanel;
     private FiKnightomata.GUI.Transitions transitionsTable;
     // End of variables declaration//GEN-END:variables
 

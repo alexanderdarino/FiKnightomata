@@ -20,7 +20,7 @@ public class NFA extends FiniteAutomaton{
 
     /**
      * Creates a NFA using the specified states and alphabet. All transitions
-     * are initialized to null, and the start state and accepting states
+     * are initialized to null, and the start stateStartNew and accepting states
      * are left undefined.
      * @param states the add of states (labeled by <code>String</code>s).
      * @param alphabet add of alphabet symbols (labeled by <code>String</code>s).
@@ -60,26 +60,24 @@ public class NFA extends FiniteAutomaton{
     protected DFA toDFA(NFA epsilonFreeNFA)
     {
         DFA.Builder dfaBuilder = DFA.Builder.create(epsilonFreeNFA.getAlphabet());
-        LinkedList bfs = new LinkedList();
+        Queue<SetLabel> bfs = new LinkedList();
         HashSet<String> visited = new HashSet<String>();
         
+        
         {
+            SetLabel stateStartNew = new SetLabel(epsilonFreeNFA.getStartState());
 
-            //String stateStart = DFA.Builder.setToState(epsilonFreeNFA.getStartState());
-            //dfaBuilder.addState(stateStart);
-            String stateStartNew = DFA.Builder.setToState(epsilonFreeNFA.getStartState());
             bfs.add(stateStartNew);
-            visited.add(stateStartNew);
+            visited.add(stateStartNew.toString());
 
-            dfaBuilder.addState(stateStartNew);
+            dfaBuilder.addState(stateStartNew.toString());
 
             if(epsilonFreeNFA.isAccepting(epsilonFreeNFA.getStartState()))
-                dfaBuilder.addAcceptingState(stateStartNew);
+                dfaBuilder.addAcceptingState(stateStartNew.toString());
 
+            dfaBuilder.setStartState(stateStartNew.toString());
             
-            HashSet stateStartSet = new HashSet();
-            stateStartSet.add(epsilonFreeNFA.getStartState());
-            initializeTransitionedStatesTransitions(stateStartSet, getTransitions(), dfaBuilder);
+            initializeTransitionedStatesTransitions(stateStartNew, getTransitions(), dfaBuilder);
 
             //HashSet<String> stateStartSet = new HashSet();
             //stateStartSet.add(epsilonFreeNFA.getStartState());
@@ -90,34 +88,44 @@ public class NFA extends FiniteAutomaton{
         
 
         while(!bfs.isEmpty()){
-            String state = (String) bfs.poll();
-            //String newState = dfaBuilder.setToState(closure(state));
-            // newState = new SetLabel(closure(state));
-            // dfaBuilder.addState(dfaBuilder.setToState(state));
+            //String stateStartNew = (String) bfs.poll();
+            SetLabel state = bfs.poll();
+            //String newState = dfaBuilder.setToState(closure(stateStartNew));
+            // newState = new SetLabel(closure(stateStartNew));
+            // dfaBuilder.addState(dfaBuilder.setToState(stateStartNew));
             
 
             for(String alphaSym : epsilonFreeNFA.getAlphabet()){
-                //Set<String> transitions = epsilonFreeNFA.getTransitions().get(state, alphaSym);
-                Set<String> transitions = getTransitions().get(state, alphaSym);
-                transitions.remove(null);
+                SetLabel transitions = new SetLabel();
 
-                if (transitions.size() > 0){
-                    //dfaBuilder.addState(dfaBuilder.setToState(state));
-                    String transitionedStates = DFA.Builder.setToState(transitions);
-                    dfaBuilder.addState(transitionedStates);
+                for (String i : state.getStates())
+                {
+                    transitions.addAll(getTransitions().get(i, alphaSym));
+                }
 
-                    //dfaBuilder.setTransition(dfaBuilder.setToState(state), alphaSym, transitionedStates);
-                    dfaBuilder.setTransition(state, alphaSym, transitionedStates);
+                //if (transitions.contains(null))
+                    transitions.remove(null);
+
+                if (transitions.size() > 1){
+
+                    dfaBuilder.addState(transitions.toString());
+
+                    //dfaBuilder.setTransition(dfaBuilder.setToState(stateStartNew), alphaSym, transitionedStates);
+                    dfaBuilder.setTransition(state.toString(), alphaSym, transitions.toString());
 
                     //initializeTransitionedStatesTransitions(epsilonFreeNFA.transitions, dfaBuilder, transitions);
                     initializeTransitionedStatesTransitions(transitions, getTransitions(), dfaBuilder);
 
-                    if(epsilonFreeNFA.isAccepting(transitions))
-                        dfaBuilder.addAcceptingState(transitionedStates);
+                    if(epsilonFreeNFA.isAccepting(transitions.getStates()))
+                        dfaBuilder.addAcceptingState(transitions.toString());
 
 
-                    if (!visited.contains(transitionedStates))
-                        bfs.add(transitionedStates);
+                    if (!visited.contains(transitions.toString()))
+                    {
+                         bfs.add(transitions);
+                         visited.add(transitions.toString());
+                    }
+                       
 //                    for (String child : transitions){
 //                        if (!visited.contains(child)){
 //                            bfs.add(child);
@@ -127,16 +135,17 @@ public class NFA extends FiniteAutomaton{
                 }
             }
         }
-        dfaBuilder.setStartState(dfaBuilder.setToState(closure(stateStart)));
+        //dfaBuilder.setStartState(dfaBuilder.setToState(closure(stateStart)));
         return dfaBuilder.build();
     }
 
-    protected void initializeTransitionedStatesTransitions (Set<String> statesSource, Transitions transitionsOriginal, DFA.Builder builder){
+    protected void initializeTransitionedStatesTransitions (SetLabel stateSource, Transitions transitionsOriginal, DFA.Builder builder){
         
         for (String alphaSym : transitionsOriginal.getAlphabet()) {
-            HashSet<String> alphaTransitions = new HashSet<String>();
+            SetLabel alphaTransitions = new SetLabel();
+            //HashSet<String> alphaTransitions = new HashSet<String>();
 
-            for (String state : statesSource){
+            for (String state : stateSource.getStates()){
                 alphaTransitions.addAll(transitions.get(state,alphaSym));
             }
 
@@ -144,13 +153,13 @@ public class NFA extends FiniteAutomaton{
 
             if (alphaTransitions.size() > 0)
             {
-                builder.addState(DFA.Builder.setToState(alphaTransitions));
-                builder.setTransition(DFA.Builder.setToState(statesSource), alphaSym, DFA.Builder.setToState(alphaTransitions));
+                builder.addState(alphaTransitions.toString());
+                builder.setTransition(stateSource.toString(), alphaSym, alphaTransitions.toString());
             }
             else
             {
                 assert false;
-                builder.setTransition(DFA.Builder.setToState(statesSource), alphaSym, null);
+                builder.setTransition(stateSource.toString(), alphaSym, null);
             }
         }
     }
@@ -190,7 +199,7 @@ public class NFA extends FiniteAutomaton{
         }
 
         Set<String> closureSet = closure(state);
-        //closureSet.removeTransitionsToState(state);
+        //closureSet.removeTransitionsToState(stateStartNew);
 
         if (!closureSet.isEmpty())
         {
@@ -204,7 +213,7 @@ public class NFA extends FiniteAutomaton{
                     transitionSet.remove(null);
 
 
-                    //transitions.get(state).get(alphaSym).addAll(transitionSet);
+                    //transitions.get(stateStartNew).get(alphaSym).addAll(transitionSet);
 
                     for (String transitionState : transitionSet){
                         transitions.add(state, alphaSym, transitionState);
@@ -369,5 +378,18 @@ public class NFA extends FiniteAutomaton{
         {
             return nfa.getAlphabet();
         }
+    }
+
+    public static interface Listener
+    {
+        public static enum ChangeType
+        {
+            INSERT, UPDATE, DELETE
+        }
+        public void stateChanged(String state, ChangeType event);
+        public void alphabetChanged(String alphaSym, ChangeType event);
+        public void transitionChanged(String state, String alphaSym, ChangeType event);
+        public void startStateChanged(String state, ChangeType event);
+        public void statesChanged(String state, ChangeType event);
     }
 }
