@@ -4,15 +4,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
-public class SetLabel {
+/**
 
-    public SetLabel ()
+ @author Alexander Darino
+ */
+class SetLabel
+{
+
+    /**
+
+     */
+    public SetLabel()
     {
 
     }
 
+    /**
+
+     @param state
+     */
     public SetLabel(String state)
     {
         add(state);
@@ -42,29 +53,53 @@ public class SetLabel {
         return hash;
     }
 
+    /**
+
+     @param states
+     */
     public SetLabel(Set<String> states)
     {
         this.states.addAll(states);
     }
 
+    /**
+
+     */
     protected Set<String> states = new HashSet();
 
+    /**
+
+     @param state
+     */
     public void add(String state)
     {
         states.add(state);
     }
 
+    /**
+
+     @param states
+     */
     public void addAll(Set<String> states)
     {
         this.states.addAll(states);
     }
 
-    public void remove (String state)
+    /**
+
+     @param state
+     */
+    public void remove(String state)
     {
         states.remove(state);
     }
 
-    public boolean contains (String state)
+    /**
+
+     @param state
+     @return
+     */
+    public boolean contains(String state)
     {
         return states.contains(state);
     }
@@ -85,11 +120,19 @@ public class SetLabel {
         return toString.toString();
     }
 
+    /**
+
+     @return
+     */
     public Set<String> getStates()
     {
         return Collections.unmodifiableSet(states);
     }
 
+    /**
+
+     @return
+     */
     public int size()
     {
         return states.size();

@@ -1,7 +1,7 @@
-import FiKnightomata.nfa.RFAFile;
+import FiKnightomata.FKAFile;
 import FiKnightomata.*;
-import FiKnightomata.dfa.DFA;
-import FiKnightomata.nfa.NFA;
+import FiKnightomata.DFA;
+import FiKnightomata.NFA;
 import java.util.Scanner;
 
 /**
@@ -11,10 +11,11 @@ import java.util.Scanner;
 public class Main {
 
     /**
-     * @param args the command line arguments
+     @param args the command line arguments
+     @throws ClassNotFoundException
      */
     public static void main(String[] args) throws ClassNotFoundException {
-        RFAFile file = new RFAFile("samples\\deadPaths.rfa");
+        FKAFile file = new FKAFile("samples\\deadPaths.rfa");
         NFA nfaTest = file.loadNFA();
         DFA convertedTest = nfaTest.toDFA();
         convertedTest.print();
@@ -26,7 +27,7 @@ public class Main {
         String input = in.nextLine();
         if (input.compareTo("") == 0)
             return;
-        FiKnightomata.dfa.Execution myExecution = convertedTest.execute(input);
+        FiKnightomata.DFA.Execution myExecution = convertedTest.execute(input);
         myExecution.printLastTraversal();
         input = in.nextLine();
         while (input.compareTo("") != 0)

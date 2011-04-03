@@ -11,7 +11,7 @@
 
 package FiKnightomata.GUI;
 
-import FiKnightomata.nfa.NFA;
+import FiKnightomata.NFA;
 
 /**
  *
