@@ -1,8 +1,5 @@
 package FiKnightomata;
 
-//import finiteautomaton.SetLabel;
-import FiKnightomata.*;
-import FiKnightomata.DFA;
 import java.util.*;
 
 /**
@@ -100,22 +97,12 @@ public class NFA extends FiniteAutomaton{
             dfaBuilder.setStartState(stateStartNew.toString());
             
             initializeTransitionedStatesTransitions(stateStartNew, getTransitions(), dfaBuilder);
-
-            //HashSet<String> stateStartSet = new HashSet();
-            //stateStartSet.add(epsilonFreeNFA.getStartState());
-
-            //initializeTransitionedStatesTransitions(epsilonFreeNFA.getTransitions(),dfaBuilder, stateStartSet);
         }
 
         
 
         while(!bfs.isEmpty()){
-            //String stateStartNew = (String) bfs.poll();
-            SetLabel state = bfs.poll();
-            //String newState = dfaBuilder.setToState(closure(stateStartNew));
-            // newState = new SetLabel(closure(stateStartNew));
-            // dfaBuilder.addState(dfaBuilder.setToState(stateStartNew));
-            
+            SetLabel state = bfs.poll();            
 
             for(String alphaSym : epsilonFreeNFA.getAlphabet()){
                 SetLabel transitions = new SetLabel();
@@ -125,17 +112,14 @@ public class NFA extends FiniteAutomaton{
                     transitions.addAll(getTransitions().get(i, alphaSym));
                 }
 
-                //if (transitions.contains(null))
-                    transitions.remove(null);
+                transitions.remove(null);
 
-                if (transitions.size() > 1){
+                if (transitions.size() > 0){
 
                     dfaBuilder.addState(transitions.toString());
 
-                    //dfaBuilder.setTransition(dfaBuilder.setToState(stateStartNew), alphaSym, transitionedStates);
                     dfaBuilder.setTransition(state.toString(), alphaSym, transitions.toString());
 
-                    //initializeTransitionedStatesTransitions(epsilonFreeNFA.transitions, dfaBuilder, transitions);
                     initializeTransitionedStatesTransitions(transitions, getTransitions(), dfaBuilder);
 
                     if(epsilonFreeNFA.isAccepting(transitions.getStates()))
@@ -147,17 +131,10 @@ public class NFA extends FiniteAutomaton{
                          bfs.add(transitions);
                          visited.add(transitions.toString());
                     }
-                       
-//                    for (String child : transitions){
-//                        if (!visited.contains(child)){
-//                            bfs.add(child);
-//                            visited.add(child);
-//                        }
-//                    }
                 }
             }
         }
-        //dfaBuilder.setStartState(dfaBuilder.setToState(closure(stateStart)));
+
         return dfaBuilder.build();
     }
 
@@ -172,7 +149,6 @@ public class NFA extends FiniteAutomaton{
         
         for (String alphaSym : transitionsOriginal.getAlphabet()) {
             SetLabel alphaTransitions = new SetLabel();
-            //HashSet<String> alphaTransitions = new HashSet<String>();
 
             for (String state : stateSource.getStates()){
                 alphaTransitions.addAll(transitions.get(state,alphaSym));
